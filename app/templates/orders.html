@@ -1,3 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Order Up!</h1>
+
+<form method="POST" action="{{ url_for('.assign')}}">
+    {{ form.csrf_token }}
+    <div>{{ form.tables.label }} {{ form.tables }}</div>
+    <div>{{ form.servers.label }} {{ form.servers }}</div>
+    <div>{{ form.assign.label }} {{ form.assign }}</div>
+</form>
 {% endblock %}

@@ -13,3 +13,7 @@ class AssignTableForm(FlaskForm):
     tables = SelectField("Tables", coerce=int)
     servers = SelectField("Servers", coerce=int)
     assign = SubmitField("Assign")
+
+
+class CloseTableForm(FlaskForm):
+    close = SubmitField("Close Table")

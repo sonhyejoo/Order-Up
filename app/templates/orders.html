@@ -1,10 +1,48 @@
 {% extends 'base.html' %} {% block content %}
 <h1>Order Up!</h1>
 
-<form method="POST" action="{{ url_for('.assign')}}">
-    {{ form.csrf_token }}
-    <div>{{ form.tables.label }} {{ form.tables }}</div>
-    <div>{{ form.servers.label }} {{ form.servers }}</div>
-    <div>{{ form.assign.label }} {{ form.assign }}</div>
+<form method="POST" action="{{ url_for('.index')}}">
+    {{ assign_form.csrf_token }}
+    <div>{{ assign_form.tables.label }} {{ assign_form.tables }}</div>
+    <div>{{ assign_form.servers.label }} {{ assign_form.servers }}</div>
+    <div>{{ assign_form.assign.label }} {{ assign_form.assign }}</div>
 </form>
+<div>
+    Your Open Orders
+    <ul>
+        {% for order in your_open_orders %}
+        <li>
+            Table {{ order.table_id }}
+            <form
+                id="closeForm"
+                method="POST"
+                action="/orders/{{ order.id }}/close"
+            >
+                {{ close_form.csrf_token }} {{ close_form.close }}
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div>
+    <h2>Menu</h2>
+    <h3>Entrees</h3>
+    <ul>
+        {% for item in menu_items if item.type.name == "Entrees" %}
+        <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+    <h3>Sides</h3>
+    <ul>
+        {% for item in menu_items if item.type.name == "Sides" %}
+        <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+    <h3>Beverages</h3>
+    <ul>
+        {% for item in menu_items if item.type.name == "Beverages" %}
+        <li>{{ item.name }}</li>
+        {% endfor %}
+    </ul>
+</div>
 {% endblock %}

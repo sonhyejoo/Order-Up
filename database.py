@@ -39,16 +39,16 @@ with app.app_context():
     tables = list()
     for i in range(10):
         tables.append(Table(id=i, number=i, capacity=i + 2))
-    orders = list()
-    orderDetails = list()
-    for i in range(3):
-        orders.append(Order(id=i, table_id=i, server_id=1, finished=False))
-        orderDetails.append(OrderDetail(id=i, order_id=i, menu_item_id=i + 1))
+    # orders = list()
+    # orderDetails = list()
+    # for i in range(3):
+    # orders.append(Order(id=i, table_id=i, server_id=1, finished=False))
+    #     orderDetails.append(OrderDetail(id=i, order_id=i, menu_item_id=i + 1))
 
     db.session.add_all(employees)
     db.session.add(dinner)
     db.session.add_all(tables)
-    db.session.add_all(orders)
-    db.session.add_all(orderDetails)
+    # db.session.add_all(orders)
+    # db.session.add_all(orderDetails)
 
     db.session.commit()

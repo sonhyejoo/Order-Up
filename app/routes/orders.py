@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_required, current_user
-from ..forms import AssignTableForm, CloseTableForm
+from ..forms import AssignTableForm, CloseTableForm, AddToOrderForm
 from ..models import Employee, Table, Order, MenuItem, MenuItemType, db
 
 
@@ -12,6 +12,7 @@ bp = Blueprint("orders", __name__, url_prefix="/orders")
 def index():
     assign_form = AssignTableForm()
     close_form = CloseTableForm()
+    add_order_form = AddToOrderForm()
 
     # Assign Table form queries
     tables = Table.query.order_by(Table.number).all()
@@ -41,10 +42,15 @@ def index():
         )
         .all()
     )
-    menu_items_list_entrees = [
-        item for item in menu_items_list if item.type.name == "Entrees"
+    add_order_form.menu_item_ids.choices = [
+        (item.id, item.name) for item in MenuItem.query.all()
     ]
-    print(menu_items_list_entrees)
+    print(add_order_form.menu_item_ids.choices)
+
+    # menu_items_list_entrees = [
+    #     item for item in menu_items_list if item.type.name == "Entrees"
+    # ]
+    # print(menu_items_list_entrees)
 
     if assign_form.validate_on_submit():
         table_id = assign_form.tables.data
@@ -63,7 +69,8 @@ def index():
         assign_form=assign_form,
         your_open_orders=your_open_orders,
         close_form=close_form,
-        menu_items=menu_items_list,
+        # menu_items=menu_items_list,
+        add_order_form=add_order_form,
     )
 
 
@@ -73,4 +80,13 @@ def close(order_id):
     order_to_close = Order.query.get(order_id)
     order_to_close.finished = True
     db.session.commit()
+    return redirect(url_for(".index"))
+
+
+@bp.route("/<int:order_id>", methods=["POST"])
+@login_required
+def add_order(order_id):
+    print(request.data)
+    data = request.form.to_dict()
+    print(data)
     return redirect(url_for(".index"))

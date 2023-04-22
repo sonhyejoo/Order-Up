@@ -13,12 +13,11 @@
         {% for order in your_open_orders %}
         <li>
             Table {{ order.table_id }}
-            <form
-                id="closeForm"
-                method="POST"
-                action="/orders/{{ order.id }}/close"
-            >
+            <form id="closeForm" method="POST" action="/orders/{{ order.id }}/close">
                 {{ close_form.csrf_token }} {{ close_form.close }}
+                <button form="add_to_order_form" formaction="/orders/{{ order.id }}" type="submit">
+                    Add to Order
+                </button>
             </form>
         </li>
         {% endfor %}
@@ -26,23 +25,34 @@
 </div>
 <div>
     <h2>Menu</h2>
+    <form method="POST" id="add_to_order_form"></form>
     <h3>Entrees</h3>
     <ul>
-        {% for item in menu_items if item.type.name == "Entrees" %}
-        <li>{{ item.name }}</li>
+        {% for item in add_order_form.menu_item_ids.choices %}
+        <li>
+            <input id="{{ item.id }}" type="checkbox" name="menu_item_ids" value="{{ item.id }}">
+            <label for="{{ item.name }}">{{ item[1] }}</label>
+        </li>
         {% endfor %}
     </ul>
-    <h3>Sides</h3>
+    <!-- <h3>Sides</h3>
     <ul>
         {% for item in menu_items if item.type.name == "Sides" %}
-        <li>{{ item.name }}</li>
+        <li>
+            <input id="{{ item.id }}" type="checkbox" name="menu_item_ids" value="{{ item.id }}">
+            <label for="{{ item.name }}">{{ item.name }}</label>
+        </li>
         {% endfor %}
     </ul>
     <h3>Beverages</h3>
     <ul>
         {% for item in menu_items if item.type.name == "Beverages" %}
-        <li>{{ item.name }}</li>
+        <li>
+            <input id="{{ item.id }}" type="checkbox" name="menu_item_ids" value="{{ item.id }}">
+            <label for="{{ item.name }}">{{ item.name }}</label>
+        </li>
         {% endfor %}
-    </ul>
+    </ul> -->
+    </form>
 </div>
 {% endblock %}
